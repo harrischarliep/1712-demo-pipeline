@@ -76,7 +76,7 @@ public interface AppService {
 	 * Submits the given reimbursement with [user] as the author
 	 * @param re Should not be null
 	 */
-	public void submitReimbursementRequest(ErsReimbursement re, ErsUser user);
+	public int submitReimbursementRequest(ErsReimbursement re, ErsUser user);
 	
 	/**
 	 * Persists [user]'s current state

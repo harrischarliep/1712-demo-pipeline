@@ -51,7 +51,7 @@ public class ErsDaoImpl implements ErsDao {
 			PreparedStatement ps = conn.prepareStatement(sql, new String[] {"r_id"});
 			ps.setDouble(1, re.getAmount());
 			ps.setString(2, re.getDescription());
-//			ps.setBlob(3, re.getReceipt());  TODO: ALLOW USER TO SUBMIT RECEIPT
+			ps.setBlob(3, re.getReceipt());  //TODO: ALLOW USER TO SUBMIT RECEIPT
 			ps.setInt(3, re.getAuthorId());
 			ps.setInt(4, re.getType().getId());
 			ps.setInt(5, re.getStatus().getId());

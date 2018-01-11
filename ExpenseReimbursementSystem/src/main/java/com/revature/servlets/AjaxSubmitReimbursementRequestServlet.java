@@ -15,10 +15,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.model.ErsReimbursement;
 import com.revature.model.ErsUser;
 import com.revature.model.ErsUserRole;
+import com.revature.service.AppService;
 import com.revature.service.AppServiceImpl;
 
 @WebServlet("/ajaxSubmitReimbursementRequest")
 public class AjaxSubmitReimbursementRequestServlet extends HttpServlet {
+	
+	AppService service = AppServiceImpl.getService();
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -40,7 +43,10 @@ public class AjaxSubmitReimbursementRequestServlet extends HttpServlet {
 		HttpSession session = req.getSession();
 		ErsUser user = (ErsUser) session.getAttribute("user");
 		
-		AppServiceImpl.getService().submitReimbursementRequest(re, user);
+		int submittedId = service.submitReimbursementRequest(re, user);
+		ErsReimbursement submittedRe = service.getReimbursement(submittedId);
+		session.setAttribute("lastSubmittedReimbursement", submittedRe);
+		
 		session.removeAttribute("reimbursements");
 		
 		if (user.getRole() == ErsUserRole.EMPLOYEE) req.getRequestDispatcher("features/employee/view_reimbursements/reimbursements_view.html").forward(req, resp);

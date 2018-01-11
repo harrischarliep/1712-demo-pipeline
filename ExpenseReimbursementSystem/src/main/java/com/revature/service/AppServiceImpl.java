@@ -112,11 +112,11 @@ public class AppServiceImpl implements AppService {
 	}
 	
 	@Override
-	public void submitReimbursementRequest(ErsReimbursement re, ErsUser user) {
-		if (re == null || user == null) return;
+	public int submitReimbursementRequest(ErsReimbursement re, ErsUser user) {
+		if (re == null || user == null) return -1;
 		re.setAuthorId(user.getId());
 		re.setStatus(ErsReimbursementStatus.PENDING);
-		dao.insertReimbursement(re);
+		return dao.insertReimbursement(re);
 	}
 
 	@Override

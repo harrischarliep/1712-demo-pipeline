@@ -42,6 +42,7 @@ function submitReimbursement() {
 	let xhr = new XMLHttpRequest();
 	xhr.onreadystatechange = function () {
 		if (xhr.readyState == 4 && xhr.status == 200) {
+			uploadReceipt();
 			document.getElementById("view").innerHTML = xhr.responseText;
 			document.getElementById("reimbursementStatusFilter").value = "Pending";
 			loadReimbursements();
@@ -71,5 +72,26 @@ function handleFileSelect(evt) {
     reader.readAsDataURL(f);
 }
 
+function uploadReceipt() {
+	let files = document.getElementById("reimbursementReceiptUpload").files;
+	console.log("files: " + files);
+	let f = files[0];
+	console.log("f: " + f);
+	let formData = new FormData();
+	console.log("formData: " + formData);
+	formData.append("receiptBlob", Blob, f.name);
+	formData.append("test", "test");
+	
+	
+	let xhr = new XMLHttpRequest();
+	xhr.onreadystatechange = function () {
+		if (xhr.readyState == 4 && xhr.status == 200) {
+			//Do nothing?
+		}
+	}
+	xhr.open("POST", "ajaxUploadReceipt", true);
+	xhr.send(formData);
+	
+}
 
 
