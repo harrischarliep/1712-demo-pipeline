@@ -26,7 +26,14 @@ public class AjaxSubmitReimbursementRequestServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		System.out.println("AjaxSubmitReimbursementRequest -GET");
-		req.getRequestDispatcher("features/employee/submit_reimbursement/reimbursement_submit.html").forward(req, resp);
+		
+		ErsUser clientUser = (ErsUser) req.getSession().getAttribute("user");
+		if (clientUser != null && clientUser.getRole() == ErsUserRole.EMPLOYEE) {
+			req.getRequestDispatcher("features/employee/submit_reimbursement/reimbursement_submit.html").forward(req, resp);
+		}
+		else if (clientUser != null) {
+			req.getRequestDispatcher("features/dashboard/dashboard_manager.html");
+		}
 	}
 	
 	@Override
