@@ -190,7 +190,7 @@ public class ErsDaoImpl implements ErsDao {
 		if (user == null) return null;
 		List<ErsReimbursement> lst = new ArrayList<>();
 		try(Connection conn = DriverManager.getConnection(this.url, this.username, this.password)) {
-			String sql = "SELECT * FROM ers_reimbursements WHERE u_id_author=?";
+			String sql = "SELECT r_id, r_amount, r_description, r_submitted, r_resolved, u_id_author, u_id_resolver, rt_type, rt_status FROM ers_reimbursements WHERE u_id_author=?";
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ps.setInt(1, user.getId());
 			ResultSet rs = ps.executeQuery();
@@ -198,11 +198,11 @@ public class ErsDaoImpl implements ErsDao {
 				ErsReimbursement re = new ErsReimbursement(rs.getInt("r_id"), rs.getDouble("r_amount"), rs.getString("r_description"), 
 						null, rs.getTimestamp("r_submitted"), rs.getTimestamp("r_resolved"), 
 						rs.getInt("u_id_author"), rs.getInt("u_id_resolver"), rs.getInt("rt_type"), rs.getInt("rt_status"));
-				Blob receiptBlob = rs.getBlob("r_receipt");
-				if (receiptBlob != null) {
-					byte[] receipt = receiptBlob.getBytes(1, (int) receiptBlob.length());
-					re.setReceipt(receipt);
-				}
+//				Blob receiptBlob = rs.getBlob("r_receipt");
+//				if (receiptBlob != null) {
+//					byte[] receipt = receiptBlob.getBytes(1, (int) receiptBlob.length());
+//					re.setReceipt(receipt);
+//				}
 				lst.add(re);
 			}
 		} catch(SQLException e) {
@@ -215,7 +215,7 @@ public class ErsDaoImpl implements ErsDao {
 	public ErsReimbursement getReimbursementById(int id) {
 		ErsReimbursement re = null;
 		try(Connection conn = DriverManager.getConnection(this.url, this.username, this.password)) {
-			String sql = "SELECT * FROM ers_reimbursements WHERE r_id=?";
+			String sql = "SELECT r_id, r_amount, r_description, r_submitted, r_resolved, u_id_author, u_id_resolver, rt_type, rt_status FROM ers_reimbursements WHERE r_id=?";
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ps.setInt(1, id);
 			ResultSet rs = ps.executeQuery();
@@ -227,11 +227,11 @@ public class ErsDaoImpl implements ErsDao {
 				re = new ErsReimbursement(rs.getInt("r_id"), rs.getDouble("r_amount"), rs.getString("r_description"), 
 						null, rs.getTimestamp("r_submitted"), rs.getTimestamp("r_resolved"), 
 						rs.getInt("u_id_author"), rs.getInt("u_id_resolver"), rs.getInt("rt_type"), rs.getInt("rt_status"));
-				Blob receiptBlob = rs.getBlob("r_receipt");
-				if (receiptBlob != null) {
-					byte[] receipt = receiptBlob.getBytes(1, (int) receiptBlob.length());
-					re.setReceipt(receipt);
-				}
+//				Blob receiptBlob = rs.getBlob("r_receipt");
+//				if (receiptBlob != null) {
+//					byte[] receipt = receiptBlob.getBytes(1, (int) receiptBlob.length());
+//					re.setReceipt(receipt);
+//				}
 				return re;
 			}
 		} catch(SQLException e) {
@@ -244,7 +244,7 @@ public class ErsDaoImpl implements ErsDao {
 	public List<ErsReimbursement> getAllReimbursements() {
 		List<ErsReimbursement> lst = new ArrayList<>();
 		try(Connection conn = DriverManager.getConnection(this.url, this.username, this.password)) {
-			String sql = "SELECT * FROM ers_reimbursements";
+			String sql = "SELECT qr_id, r_amount, r_description, r_submitted, r_resolved, u_id_author, u_id_resolver, rt_type, rt_status FROM ers_reimbursements";
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
@@ -254,11 +254,11 @@ public class ErsDaoImpl implements ErsDao {
 				ErsReimbursement re = new ErsReimbursement(rs.getInt("r_id"), rs.getDouble("r_amount"), rs.getString("r_description"), 
 						null, rs.getTimestamp("r_submitted"), rs.getTimestamp("r_resolved"), 
 						rs.getInt("u_id_author"), rs.getInt("u_id_resolver"), rs.getInt("rt_type"), rs.getInt("rt_status"));
-				Blob receiptBlob = rs.getBlob("r_receipt");
-				if (receiptBlob != null) {
-					byte[] receipt = receiptBlob.getBytes(1, (int) receiptBlob.length());
-					re.setReceipt(receipt);
-				}
+//				Blob receiptBlob = rs.getBlob("r_receipt");
+//				if (receiptBlob != null) {
+//					byte[] receipt = receiptBlob.getBytes(1, (int) receiptBlob.length());
+//					re.setReceipt(receipt);
+//				}
 				lst.add(re);
 			}
 		} catch(SQLException e) {
@@ -272,7 +272,7 @@ public class ErsDaoImpl implements ErsDao {
 		try(Connection conn = DriverManager.getConnection(this.url, this.username, this.password)) {
 			String selectors = "u1.u_id, u1.u_username, u1.u_firstname, u1.u_lastname, u1.u_email, u1.ur_id, "
 					+ "u2.u_id, u2.u_username, u2.u_firstname, u2.u_lastname, u2.u_email, u2.ur_id, "
-					+ "r_id, r_amount, r_description, r_receipt, r_submitted, r_resolved, rt_type, rt_status";
+					+ "r_id, r_amount, r_description, r_submitted, r_resolved, rt_type, rt_status";
 			String sql = "SELECT " + selectors + " FROM (ers_users u1 INNER JOIN ers_reimbursements re ON u1.u_id=re.u_id_author) LEFT OUTER JOIN ers_users u2 ON u_id_resolver=u2.u_id";
 			PreparedStatement ps = conn.prepareStatement(sql);
 			System.out.println("beforeExecute");
@@ -286,12 +286,12 @@ public class ErsDaoImpl implements ErsDao {
 				ErsReimbursementDTO re = new ErsReimbursementDTO(rs.getInt("r_id"), rs.getDouble("r_amount"), rs.getString("r_description"),
 						null, rs.getTimestamp("r_submitted"), rs.getTimestamp("r_resolved"), author, resolver,
 						ErsReimbursementType.findById(rs.getInt("rt_type")).toValue(), ErsReimbursementStatus.findById(rs.getInt("rt_status")).toValue());
-				Blob receiptBlob = rs.getBlob("r_receipt");
-				if (receiptBlob != null) {
-					System.out.println("Receipt not null!!");
-					byte[] receipt = receiptBlob.getBytes(1, (int) receiptBlob.length());
-					re.setReceipt(receipt);
-				}
+//				Blob receiptBlob = rs.getBlob("r_receipt");
+//				if (receiptBlob != null) {
+//					System.out.println("Receipt not null!!");
+//					byte[] receipt = receiptBlob.getBytes(1, (int) receiptBlob.length());
+//					re.setReceipt(receipt);
+//				}
 				lst.add(re);
 			}
 		} catch(SQLException e) {

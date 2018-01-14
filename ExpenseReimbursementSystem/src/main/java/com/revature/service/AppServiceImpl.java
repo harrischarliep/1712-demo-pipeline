@@ -112,10 +112,8 @@ public class AppServiceImpl implements AppService {
 	}
 	
 	public byte[] getReceiptByReimbursementId(int id) {
-		if (id < 0) return null;
-		ErsReimbursement re = dao.getReimbursementById(id);
-		if (re != null) return re.getReceipt();
-		return null;
+		return dao.getReimbursementReceiptByReimbursementId(id);
+
 	}
 
 	
