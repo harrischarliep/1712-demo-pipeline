@@ -301,6 +301,23 @@ public class ErsDaoImpl implements ErsDao {
 		return lst;
 		
 	}
+	
+	public byte[] getReimbursementReceiptByReimbursementId(int id) {
+		try(Connection conn = DriverManager.getConnection(this.url, this.username, this.password)) {
+			String sql = "SELECT r_receipt FROM ers_reimbursements WHERE r_id=?";
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setInt(1, id);
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+				Blob receiptBlob = rs.getBlob("r_receipt");
+				if (receiptBlob != null) return receiptBlob.getBytes(1, (int) receiptBlob.length());
+			}
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 
 	
 	//------------------------------UPDATE

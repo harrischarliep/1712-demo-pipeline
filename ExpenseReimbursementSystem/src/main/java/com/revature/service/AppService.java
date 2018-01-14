@@ -72,6 +72,8 @@ public interface AppService {
 	
 	public List<ErsUserDTO> getAllUsersDTO(String role);
 	
+	public byte[] getReceiptByReimbursementId(int id);
+	
 	/**
 	 * Submits the given reimbursement with [user] as the author
 	 * @param re Should not be null

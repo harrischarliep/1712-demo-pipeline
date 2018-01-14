@@ -1,9 +1,9 @@
 package com.revature.dto;
 
 import java.io.Serializable;
-import java.sql.Blob;
 import java.sql.Timestamp;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.revature.model.ErsReimbursement;
 import com.revature.model.ErsUser;
@@ -18,6 +18,8 @@ public class ErsReimbursementDTO implements Serializable {
 	private int id;
 	private double amount;
 	private String description;
+	
+	@JsonIgnore
 	private byte[] receipt;		//TODO
 	
 	@JsonSerialize(using = JsonDateSerializer.class)

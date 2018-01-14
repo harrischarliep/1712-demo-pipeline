@@ -70,6 +70,8 @@ public interface ErsDao {
 	
 	public List<ErsReimbursementDTO> getAllReimbursementDTO();
 	
+	public byte[] getReimbursementReceiptByReimbursementId(int id);
+	
 	//UPDATE
 	
 	/**

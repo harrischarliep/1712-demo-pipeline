@@ -111,6 +111,14 @@ public class AppServiceImpl implements AppService {
 		return filtered;
 	}
 	
+	public byte[] getReceiptByReimbursementId(int id) {
+		if (id < 0) return null;
+		ErsReimbursement re = dao.getReimbursementById(id);
+		if (re != null) return re.getReceipt();
+		return null;
+	}
+
+	
 	@Override
 	public int submitReimbursementRequest(ErsReimbursement re, ErsUser user) {
 		if (re == null || user == null || user.getRole() != ErsUserRole.EMPLOYEE) return -1;

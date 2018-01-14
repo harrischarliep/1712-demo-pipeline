@@ -46,13 +46,6 @@ public class AjaxSubmitReimbursementRequestServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		System.out.println("AjaxSubmitReimbursementRequestServlet -POST");
 		
-//		Map<String, String[]> myMap = req.getParameterMap();
-//		Set<String> reObject = myMap.keySet();
-//		Object obj = reObject.toArray()[0];
-//		ObjectMapper jackson = new ObjectMapper();
-		
-//		ErsReimbursement re = jackson.readValue(((String) obj), ErsReimbursement.class);
-		
 		double amount = Double.parseDouble(req.getParameter("amount"));
 		ErsReimbursementType type = ErsReimbursementType.forValue(req.getParameter("type"));
 		String description = req.getParameter("description");

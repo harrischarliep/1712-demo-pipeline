@@ -14,6 +14,7 @@ function loadReimbursementsViewForManager() {
 			}, false);
 			loadReimbursementsForManager();
 			loadApproveDenyButtons(true);
+			$("receiptImg").hide();
 		}
 	}
 	xhr.open("GET", "ajaxLoadManagerReimbursementsView", true);
@@ -88,6 +89,7 @@ function populateManagerReimbursementTable(re) {
 				selectedReimbursement = re; 
 			}
 			loadApproveDenyButtons(false);
+			loadReceiptImage();
 		}, false);
 	document.getElementById("reimbursementTable").appendChild(tr);
 }
@@ -152,6 +154,23 @@ function denyRequest() {
 	let re_id = selectedReimbursement.id;
 	xhr.open("GET", `ajaxResolveRequest?approve=false&re_id=${re_id}`);
 	xhr.send();
+}
+
+function loadReceiptImage() {
+	let xhr = new XMLHttpRequest();
+	xhr.onreadystatechange = function () {
+		if (xhr.readyState == 4 && xhr.status == 200) {
+			let json = JSON.parse(xhr.responseText);
+			let img = document.getElementById("receiptImg");
+			img.src = `data:${json.mimetype};base64,${json.value}`;
+		}
+	}
+	xhr.open("GET", `ajaxLoadReceipt?id=${selectedReimbursement.id}`, true);
+	xhr.send();
+//	if (selectedReimbursement != null) {
+//		let img = document.getElementById("receiptImg");
+//		img.src = `data:image/png;base64,${selectedReimbursement.receipt}`;
+//	}
 }
 
 
