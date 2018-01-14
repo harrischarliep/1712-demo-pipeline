@@ -24,12 +24,8 @@ public class AjaxUploadReceiptServlet extends HttpServlet {
 		Part part = req.getPart("file");
 		byte[] arr = toByteArray(part.getInputStream());
 		
-		int size = arr.length;
-		resp.setContentLength(size);
-        resp.setContentType("Content-Type");  
-        ServletOutputStream stream = resp.getOutputStream();
-        stream.write(arr);
-        stream.flush();                
+		
+		
 	
 	
 	}

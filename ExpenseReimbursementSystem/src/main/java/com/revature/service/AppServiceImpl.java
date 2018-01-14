@@ -113,7 +113,7 @@ public class AppServiceImpl implements AppService {
 	
 	@Override
 	public int submitReimbursementRequest(ErsReimbursement re, ErsUser user) {
-		if (re == null || user == null) return -1;
+		if (re == null || user == null || user.getRole() != ErsUserRole.EMPLOYEE) return -1;
 		re.setAuthorId(user.getId());
 		re.setStatus(ErsReimbursementStatus.PENDING);
 		return dao.insertReimbursement(re);

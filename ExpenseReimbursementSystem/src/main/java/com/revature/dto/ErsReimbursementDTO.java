@@ -18,7 +18,7 @@ public class ErsReimbursementDTO implements Serializable {
 	private int id;
 	private double amount;
 	private String description;
-	private Blob receipt;		//TODO
+	private byte[] receipt;		//TODO
 	
 	@JsonSerialize(using = JsonDateSerializer.class)
 	private Timestamp submitted;
@@ -36,7 +36,7 @@ public class ErsReimbursementDTO implements Serializable {
 	public ErsReimbursementDTO() {
 	}
 	
-	public ErsReimbursementDTO(int id, double amount, String description, Blob receipt, Timestamp submitted, Timestamp resolved,
+	public ErsReimbursementDTO(int id, double amount, String description, byte[] receipt, Timestamp submitted, Timestamp resolved,
 			ErsUserDTO author, ErsUserDTO resolver, String type, String status) {
 		this.id = id;
 		this.amount = amount;
@@ -88,11 +88,11 @@ public class ErsReimbursementDTO implements Serializable {
 		this.description = description;
 	}
 
-	public Blob getReceipt() {
+	public byte[] getReceipt() {
 		return receipt;
 	}
 
-	public void setReceipt(Blob receipt) {
+	public void setReceipt(byte[] receipt) {
 		this.receipt = receipt;
 	}
 

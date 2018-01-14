@@ -1,5 +1,6 @@
 package com.revature.dao;
 
+import java.io.ByteArrayInputStream;
 import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -47,14 +48,17 @@ public class ErsDaoImpl implements ErsDao {
 	public int insertReimbursement(ErsReimbursement re) {
 		if (re == null) return -1;
 		try(Connection conn = DriverManager.getConnection(this.url, this.username, this.password)) {
-			String sql = "INSERT INTO ers_reimbursements (r_amount, r_description, u_id_author, rt_type, rt_status) VALUES (?, ?, ?, ?, ?)";
+			String sql = "INSERT INTO ers_reimbursements (r_amount, r_description, r_receipt, u_id_author, rt_type, rt_status) VALUES (?, ?, ?, ?, ?, ?)";
 			PreparedStatement ps = conn.prepareStatement(sql, new String[] {"r_id"});
 			ps.setDouble(1, re.getAmount());
 			ps.setString(2, re.getDescription());
-			ps.setBlob(3, re.getReceipt());  //TODO: ALLOW USER TO SUBMIT RECEIPT
-			ps.setInt(3, re.getAuthorId());
-			ps.setInt(4, re.getType().getId());
-			ps.setInt(5, re.getStatus().getId());
+			if (re.getReceipt() != null) {
+				ps.setBinaryStream(3, new ByteArrayInputStream(re.getReceipt()), re.getReceipt().length);
+			}
+			else ps.setBinaryStream(3, null);
+			ps.setInt(4, re.getAuthorId());
+			ps.setInt(5, re.getType().getId());
+			ps.setInt(6, re.getStatus().getId());
 			ps.executeUpdate();
 			ResultSet rs = ps.getGeneratedKeys();	
 			if (rs.next()) return rs.getInt(1);
@@ -191,9 +195,15 @@ public class ErsDaoImpl implements ErsDao {
 			ps.setInt(1, user.getId());
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
-				lst.add(new ErsReimbursement(rs.getInt("r_id"), rs.getDouble("r_amount"), rs.getString("r_description"), 
-						rs.getBlob("r_receipt"), rs.getTimestamp("r_submitted"), rs.getTimestamp("r_resolved"), 
-						rs.getInt("u_id_author"), rs.getInt("u_id_resolver"), rs.getInt("rt_type"), rs.getInt("rt_status")));
+				ErsReimbursement re = new ErsReimbursement(rs.getInt("r_id"), rs.getDouble("r_amount"), rs.getString("r_description"), 
+						null, rs.getTimestamp("r_submitted"), rs.getTimestamp("r_resolved"), 
+						rs.getInt("u_id_author"), rs.getInt("u_id_resolver"), rs.getInt("rt_type"), rs.getInt("rt_status"));
+				Blob receiptBlob = rs.getBlob("r_receipt");
+				if (receiptBlob != null) {
+					byte[] receipt = receiptBlob.getBytes(1, (int) receiptBlob.length());
+					re.setReceipt(receipt);
+				}
+				lst.add(re);
 			}
 		} catch(SQLException e) {
 			e.printStackTrace();
@@ -210,10 +220,19 @@ public class ErsDaoImpl implements ErsDao {
 			ps.setInt(1, id);
 			ResultSet rs = ps.executeQuery();
 			if (rs.next()) {
+//				re = new ErsReimbursement(rs.getInt("r_id"), rs.getDouble("r_amount"), rs.getString("r_description"), 
+//										  rs.getBlob("r_receipt"), rs.getTimestamp("r_submitted"),
+//										  rs.getTimestamp("r_resolved"), rs.getInt("u_id_author"), rs.getInt("u_id_resolver"), 
+//										  rs.getInt("rt_type"), rs.getInt("rt_status"));
 				re = new ErsReimbursement(rs.getInt("r_id"), rs.getDouble("r_amount"), rs.getString("r_description"), 
-										  rs.getBlob("r_receipt"), rs.getTimestamp("r_submitted"),
-										  rs.getTimestamp("r_resolved"), rs.getInt("u_id_author"), rs.getInt("u_id_resolver"), 
-										  rs.getInt("rt_type"), rs.getInt("rt_status"));
+						null, rs.getTimestamp("r_submitted"), rs.getTimestamp("r_resolved"), 
+						rs.getInt("u_id_author"), rs.getInt("u_id_resolver"), rs.getInt("rt_type"), rs.getInt("rt_status"));
+				Blob receiptBlob = rs.getBlob("r_receipt");
+				if (receiptBlob != null) {
+					byte[] receipt = receiptBlob.getBytes(1, (int) receiptBlob.length());
+					re.setReceipt(receipt);
+				}
+				return re;
 			}
 		} catch(SQLException e) {
 			e.printStackTrace();
@@ -229,9 +248,18 @@ public class ErsDaoImpl implements ErsDao {
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
-				lst.add(new ErsReimbursement(rs.getInt("r_id"), rs.getDouble("r_amount"), rs.getString("r_description"), 
-						rs.getBlob("r_receipt"), rs.getTimestamp("r_submitted"), rs.getTimestamp("r_resolved"), 
-						rs.getInt("u_id_author"), rs.getInt("u_id_resolver"), rs.getInt("rt_type"), rs.getInt("rt_status")));
+//				lst.add(new ErsReimbursement(rs.getInt("r_id"), rs.getDouble("r_amount"), rs.getString("r_description"), 
+//						rs.getBlob("r_receipt"), rs.getTimestamp("r_submitted"), rs.getTimestamp("r_resolved"), 
+//						rs.getInt("u_id_author"), rs.getInt("u_id_resolver"), rs.getInt("rt_type"), rs.getInt("rt_status")));
+				ErsReimbursement re = new ErsReimbursement(rs.getInt("r_id"), rs.getDouble("r_amount"), rs.getString("r_description"), 
+						null, rs.getTimestamp("r_submitted"), rs.getTimestamp("r_resolved"), 
+						rs.getInt("u_id_author"), rs.getInt("u_id_resolver"), rs.getInt("rt_type"), rs.getInt("rt_status"));
+				Blob receiptBlob = rs.getBlob("r_receipt");
+				if (receiptBlob != null) {
+					byte[] receipt = receiptBlob.getBytes(1, (int) receiptBlob.length());
+					re.setReceipt(receipt);
+				}
+				lst.add(re);
 			}
 		} catch(SQLException e) {
 			e.printStackTrace();
@@ -256,10 +284,15 @@ public class ErsDaoImpl implements ErsDao {
 				ErsUserDTO resolver = new ErsUserDTO(rs.getInt(7), rs.getString(8), rs.getString(9),
 						rs.getString(10), rs.getString(11), ErsUserRole.findById(rs.getInt(12)).toString());
 				ErsReimbursementDTO re = new ErsReimbursementDTO(rs.getInt("r_id"), rs.getDouble("r_amount"), rs.getString("r_description"),
-						rs.getBlob("r_receipt"), rs.getTimestamp("r_submitted"), rs.getTimestamp("r_resolved"), author, resolver,
+						null, rs.getTimestamp("r_submitted"), rs.getTimestamp("r_resolved"), author, resolver,
 						ErsReimbursementType.findById(rs.getInt("rt_type")).toValue(), ErsReimbursementStatus.findById(rs.getInt("rt_status")).toValue());
+				Blob receiptBlob = rs.getBlob("r_receipt");
+				if (receiptBlob != null) {
+					System.out.println("Receipt not null!!");
+					byte[] receipt = receiptBlob.getBytes(1, (int) receiptBlob.length());
+					re.setReceipt(receipt);
+				}
 				lst.add(re);
-				System.out.println(re);
 			}
 		} catch(SQLException e) {
 			e.printStackTrace();
@@ -299,7 +332,7 @@ public class ErsDaoImpl implements ErsDao {
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ps.setDouble(1, re.getAmount());
 			ps.setString(2, re.getDescription());
-			ps.setBlob(3, re.getReceipt());
+			ps.setBlob(3, new ByteArrayInputStream(re.getReceipt()));
 			ps.setInt(4, re.getType().getId());
 			ps.setInt(5, re.getId());
 			ps.executeUpdate();

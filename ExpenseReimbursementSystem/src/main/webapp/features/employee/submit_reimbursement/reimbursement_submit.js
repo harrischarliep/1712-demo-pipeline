@@ -21,7 +21,8 @@ function submitReimbursement() {
 	let reAmt = document.getElementById("reimbursementAmtInput").value;
 	let reType = document.getElementById("reimbursementTypeInput").value;
 	let reDesc = document.getElementById("reimbursementDescInput").value;
-
+	console.log(reAmt);
+	
 	if (reDesc.length > 100) {
 		alert("Description must not exceed 100 characters.");
 		return;
@@ -32,27 +33,42 @@ function submitReimbursement() {
 		return;
 	}
 	
-	let re = {
-		amount: reAmt,
-		description: reDesc,
-		type: reType
+	let formData = new FormData();
+	formData.append("amount", reAmt);
+	formData.append("type", reType);
+	formData.append("description", reDesc);
+	
+	for (let k of formData.keys()) {
+		console.log(k);
 	}
-	re = JSON.stringify(re);
+	
+	let reReceipt = document.getElementById("reimbursementReceiptUpload").files[0];
+	if (reReceipt != null) {
+		console.log("an image has been selected")
+		formData.append("receipt", reReceipt);
+	}
+
+	
+//	let re = {
+//		amount: reAmt,
+//		description: reDesc,
+//		type: reType
+//	}
+//	re = JSON.stringify(re);
 	
 	let xhr = new XMLHttpRequest();
 	xhr.onreadystatechange = function () {
 		if (xhr.readyState == 4 && xhr.status == 200) {
-			uploadReceipt();
 			document.getElementById("view").innerHTML = xhr.responseText;
 			document.getElementById("reimbursementStatusFilter").value = "Pending";
 			loadReimbursements();
 		}
 	}
 	xhr.open("POST", "ajaxSubmitReimbursementRequest", true);
-// console.log(re);
-	xhr.setRequestHeader("key", re);
-	xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-	xhr.send(re);
+//// console.log(re);
+//	xhr.setRequestHeader("key", formData);
+//	xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	xhr.send(formData);
 }
 
 

@@ -1,16 +1,16 @@
 package com.revature.model;
 
-import java.sql.Blob;
 import java.sql.Timestamp;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 
 public class ErsReimbursement {
 
 	private int id;
 	private double amount;
 	private String description;
-	private Blob receipt;		//TODO
+	private byte[] receipt;		//TODO
 	
 	@JsonSerialize(using = JsonDateSerializer.class)
 	private Timestamp submitted;
@@ -28,7 +28,7 @@ public class ErsReimbursement {
 	public ErsReimbursement() {
 	}
 
-	public ErsReimbursement(int id, double amount, String description, Blob receipt, Timestamp submitted,
+	public ErsReimbursement(int id, double amount, String description, byte[] receipt, Timestamp submitted,
 			Timestamp resolved, int authorId, int resolverId, ErsReimbursementType type,
 			ErsReimbursementStatus status) {
 		super();
@@ -44,7 +44,7 @@ public class ErsReimbursement {
 		this.status = status;
 	}
 	
-	public ErsReimbursement(int id, double amount, String description, Blob receipt, Timestamp submitted,
+	public ErsReimbursement(int id, double amount, String description, byte[] receipt, Timestamp submitted,
 			Timestamp resolved, int authorId, int resolverId, int typeId,
 			int statusId) {
 		super();
@@ -84,11 +84,11 @@ public class ErsReimbursement {
 		this.description = description;
 	}
 
-	public Blob getReceipt() {
+	public byte[] getReceipt() {
 		return receipt;
 	}
 
-	public void setReceipt(Blob receipt) {
+	public void setReceipt(byte[] receipt) {
 		this.receipt = receipt;
 	}
 
