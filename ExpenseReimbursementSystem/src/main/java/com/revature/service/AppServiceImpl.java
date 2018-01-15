@@ -143,10 +143,7 @@ public class AppServiceImpl implements AppService {
 	
 	@Override
 	public void resolveRequest(ErsUser user, ErsReimbursement re, boolean approve) {
-		if (user == null || re == null || user.getRole() != ErsUserRole.MANAGER) {
-			System.out.println("Invalid input for resolveRequest");
-			return;
-		}
+		if (user == null || re == null || user.getRole() != ErsUserRole.MANAGER) return;
 		re.setResolverId(user.getId());
 		if (approve) re.setStatus(ErsReimbursementStatus.APPROVED);
 		else re.setStatus(ErsReimbursementStatus.DENIED);
@@ -177,19 +174,4 @@ public class AppServiceImpl implements AppService {
 		return dtoLst;
 	}
 	
-	/*public static void main(String[] args) {
-		ErsDaoImpl dao = (ErsDaoImpl) ErsDaoImpl.getDao();
-		ErsUser manager = dao.getUserById(61);
-		ErsUser employee = dao.getUserById(63);
-		List<ErsReimbursement> lst = dao.getAllReimbursementsByUser(employee);
-		System.out.println(lst);
-		for(ErsReimbursement re : lst) {
-			System.out.println(re);
-			if (re.getStatus().equals(ErsReimbursementStatus.APPROVED)) getService().resolveRequest(manager, re, true); 
-			if (re.getStatus().equals(ErsReimbursementStatus.DENIED)) getService().resolveRequest(manager, re, false); 
-		}
-	}*/
-
-	
-
 }

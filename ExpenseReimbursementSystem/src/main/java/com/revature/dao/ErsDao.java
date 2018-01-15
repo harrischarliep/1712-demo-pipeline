@@ -45,6 +45,10 @@ public interface ErsDao {
 	 */
 	public List<ErsUser> getAllUsers();
 	
+	/**
+	 * Gets all users from the databse as ErsUserDTO objects
+	 * @return An arraylist of ErsUserDTO objects
+	 */
 	public List<ErsUserDTO> getAllUsersDTO();
 	
 	/**
@@ -58,7 +62,6 @@ public interface ErsDao {
 	 * Retrieves the reimbursement from the DB whose id matches [id]
 	 * @param id
 	 * @return A new ErsReimbursement object or null if no such reimbursement exists
-	 * PROBABLY WILL ONLY USE FOR TESTING
 	 */
 	public ErsReimbursement getReimbursementById(int id);						//WORKING
 	
@@ -68,8 +71,17 @@ public interface ErsDao {
 	 */
 	public List<ErsReimbursement> getAllReimbursements();
 	
+	/**
+	 * Gets all reimbursements requests from the database as ErsReimbursementDTO objects
+	 * @return An arraylist of ErsReimbursementDTO objects 
+	 */
 	public List<ErsReimbursementDTO> getAllReimbursementDTO();
 	
+	/**
+	 * Gets the receipt image of the reimbursement request whose id is [id] as a byte array
+	 * @param id
+	 * @return A byte[] containing the image of the receipt for the reimbursement with id = [id]
+	 */
 	public byte[] getReimbursementReceiptByReimbursementId(int id);
 	
 	//UPDATE

@@ -13,10 +13,6 @@ function loadNavBar() {
 	xhr.onreadystatechange = function () {
 		if (xhr.readyState == 4 && xhr.status == 200) {
 			document.getElementById('navbar').innerHTML = xhr.responseText;
-//			document.getElementById('dashboard').addEventListener("click", loadDashboardView, false);
-			//document.getElementById('reimbursements').addEventListener("click", loadReimbursementsView, false);
-//			document.getElementById('account').addEventListener("click", loadAccountView, false);
-//			document.getElementById('logout').addEventListener('click', logoutUser, false);		
 		}
 	}
 	xhr.open("GET", "ajaxNavbar?r=" + new Date().getTime(), true);
@@ -45,7 +41,7 @@ function loadGreeting() {
 	}
 	xhr.open("GET", "ajaxAccountInfo", true);
 	xhr.send();
-}
+}    
 
 function loadFooter() {
 	let xhr = new XMLHttpRequest();
@@ -68,7 +64,3 @@ function logoutUser() {
 	xhr.open("POST", "logout", true);
 	xhr.send();
 }
-
-
-
-

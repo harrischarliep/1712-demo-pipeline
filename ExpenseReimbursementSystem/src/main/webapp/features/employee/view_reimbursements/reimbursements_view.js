@@ -1,6 +1,3 @@
-/**
- * 
- */
 
 function loadReimbursementsViewForEmployee() {
 	let xhr = new XMLHttpRequest();

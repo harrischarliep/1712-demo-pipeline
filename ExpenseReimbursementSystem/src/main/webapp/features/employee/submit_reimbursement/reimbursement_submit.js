@@ -1,6 +1,3 @@
-/**
- * 
- */
 
 function loadSubmitReimbursementView() {
 	console.log("loadSubmitReimbursementView")
@@ -48,14 +45,6 @@ function submitReimbursement() {
 		formData.append("receipt", reReceipt);
 	}
 
-	
-//	let re = {
-//		amount: reAmt,
-//		description: reDesc,
-//		type: reType
-//	}
-//	re = JSON.stringify(re);
-	
 	let xhr = new XMLHttpRequest();
 	xhr.onreadystatechange = function () {
 		if (xhr.readyState == 4 && xhr.status == 200) {
@@ -65,14 +54,8 @@ function submitReimbursement() {
 		}
 	}
 	xhr.open("POST", "ajaxSubmitReimbursementRequest", true);
-//// console.log(re);
-//	xhr.setRequestHeader("key", formData);
-//	xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	xhr.send(formData);
 }
-
-
-
 
 // Adapted from:
 // http://www.onlywebpro.com/2012/01/24/create-thumbnail-preview-of-images-using-html5-api/

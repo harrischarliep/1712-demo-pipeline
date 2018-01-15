@@ -33,6 +33,11 @@ public interface AppService {
 	 */
 	public List<ErsReimbursement> getReimbursements(ErsUser user, ErsReimbursementStatus status);
 	
+	/**
+	 * Gets the reimbursement with id = [reId]
+	 * @param reId
+	 * @return The ErsReimbursement whose id is [reId], or null if no such ErsReimbursement exists
+	 */
 	public ErsReimbursement getReimbursement(int reId);
 	
 	/**
@@ -48,6 +53,10 @@ public interface AppService {
 	 */
 	public List<ErsReimbursement> getAllReimbursements(ErsReimbursementStatus status);
 	
+	/**
+	 * Gets all reimbursements submitted by all employees as ErsReimbursementDTO objects with status = [status]
+	 * @return
+	 */
 	public List<ErsReimbursementDTO> getAllReimbursementsDTO();
 	
 	/**
@@ -70,8 +79,18 @@ public interface AppService {
 	 */
 	public List<ErsUser> getAllUsers(ErsUserRole role);
 	
+	/**
+	 * Gets all registered users as ErsUserDTO objects with role = [role]
+	 * @param role An Arraylist of ErsUserDTO objects
+	 * @return
+	 */
 	public List<ErsUserDTO> getAllUsersDTO(String role);
 	
+	/**
+	 * Gets the receipt image of the reimbursement with id = [id] as a byte[]
+	 * @param id
+	 * @return A byte[] containing the image of the receipt for the reimbursement with id = [id]
+	 */
 	public byte[] getReceiptByReimbursementId(int id);
 	
 	/**

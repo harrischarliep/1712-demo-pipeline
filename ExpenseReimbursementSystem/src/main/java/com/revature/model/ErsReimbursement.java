@@ -18,8 +18,6 @@ public class ErsReimbursement {
 	@JsonSerialize(using = JsonDateSerializer.class)
 	private Timestamp resolved;
 	
-//	private ErsUser author;
-//	private ErsUser resolver;
 	private int authorId;
 	private int resolverId;
 	private ErsReimbursementType type;

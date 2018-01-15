@@ -1,6 +1,3 @@
-/**
- * 
- */
 
 function loadAccountView() {
 	console.log("loadAccountView");

@@ -27,8 +27,6 @@ public class AjaxAccountInfoServlet extends HttpServlet {
 		ErsUser sessionUser = (ErsUser) session.getAttribute("user");
 		
 		if (sessionUser != null) {
-//			ErsUser user = AppServiceImpl.getService().getUser(sessionUser.getUsername());
-			
 			ObjectMapper mapper = new ObjectMapper();
 			String json = mapper.writeValueAsString(sessionUser);
 			PrintWriter out = resp.getWriter();

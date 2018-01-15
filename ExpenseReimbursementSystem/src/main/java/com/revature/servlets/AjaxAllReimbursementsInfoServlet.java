@@ -35,12 +35,9 @@ public class AjaxAllReimbursementsInfoServlet extends HttpServlet {
 		}
 		
 		String idParam = req.getParameter("empl_id");
-		System.out.println(idParam);
 		if (idParam != null) {
-			System.out.println("idParam: " + idParam);
 			int id = Integer.parseInt(idParam);
 			if (id >= 0) dtoLst = filterByEmployeeId(dtoLst, id);
-			System.out.println(dtoLst);
 		}
 		
 				

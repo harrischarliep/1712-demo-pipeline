@@ -1,7 +1,3 @@
-/**
- * 
- */
-
 
 function loadEmployeesViewFromManagerNavbar() {
 	console.log("loadEmployeesView");

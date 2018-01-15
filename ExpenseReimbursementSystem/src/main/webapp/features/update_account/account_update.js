@@ -1,6 +1,3 @@
-/**
- * 
- */
 
 function loadAccountDetailsUpdateView() {
 	console.log("loadAccountDetailsUpdateView");

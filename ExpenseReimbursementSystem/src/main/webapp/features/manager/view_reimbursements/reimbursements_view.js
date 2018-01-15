@@ -1,6 +1,3 @@
-/**
- * 
- */
 
 var selectedReimbursement;
 
@@ -11,11 +8,12 @@ function loadReimbursementsViewForManager() {
 			document.getElementById("view").innerHTML = xhr.responseText;
 			document.getElementById("reimbursementStatusFilter").addEventListener("change", function () {
 				selectedReimbursement = null;
+				$("#receiptImg").hide();
 				loadReimbursementsForManager();
 			}, false);
 			loadReimbursementsForManager();
 			loadApproveDenyButtons(true);
-			$("receiptImg").hide();
+			$("#receiptImg").hide();
 		}
 	}
 	xhr.open("GET", "ajaxLoadManagerReimbursementsView", true);
@@ -41,6 +39,7 @@ function loadReimbursementsForManager(empl_id) {
 				loadApproveDenyButtons(true);
 				$("#approveDenyButtons").hide();
 				selectedReimbursement = null;
+				$("#receiptImg").hide();
 			}
 			else {
 				if (selectedReimbursement == null) loadApproveDenyButtons(true);
@@ -88,11 +87,12 @@ function populateManagerReimbursementTable(re) {
 	tr.class="clickable-row";
 	tr.addEventListener("click", function () { 
 		  	$(this).addClass('active').siblings().removeClass('active');
-			if (re.status == "pending") {
+//			if (re.status == "pending") {
 				console.log("re.status = " + re.status);
 				selectedReimbursement = re; 
-			}
+//			}
 			loadApproveDenyButtons(false);
+			$("#receiptImg").show();
 			loadReceiptImage();
 		}, false);
 	document.getElementById("reimbursementTable").appendChild(tr);
@@ -171,10 +171,6 @@ function loadReceiptImage() {
 	}
 	xhr.open("GET", `ajaxLoadReceipt?id=${selectedReimbursement.id}`, true);
 	xhr.send();
-//	if (selectedReimbursement != null) {
-//		let img = document.getElementById("receiptImg");
-//		img.src = `data:image/png;base64,${selectedReimbursement.receipt}`;
-//	}
 }
 
 
