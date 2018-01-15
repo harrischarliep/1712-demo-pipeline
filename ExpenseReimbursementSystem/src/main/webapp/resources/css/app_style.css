@@ -39,6 +39,10 @@ body, html {
 	color: #FE6900;
 }
 
+.manager-color {
+	color: #09f;
+}
+
 .dashboard-card-container {
 	padding: 10px;
 }
@@ -71,6 +75,11 @@ footer {
 }
 
 #employee-dashboard {
+	background-image: url("../images/portals.png");
+	object-fit: contain;
+}
+
+#manager-dashboard {
 	background-image: url("../images/portals.png");
 	object-fit: contain;
 }
