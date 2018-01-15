@@ -10,6 +10,7 @@ function loadReimbursementsViewForManager() {
 		if (xhr.readyState == 4 && xhr.status == 200) {
 			document.getElementById("view").innerHTML = xhr.responseText;
 			document.getElementById("reimbursementStatusFilter").addEventListener("change", function () {
+				selectedReimbursement = null;
 				loadReimbursementsForManager();
 			}, false);
 			loadReimbursementsForManager();
@@ -41,7 +42,10 @@ function loadReimbursementsForManager(empl_id) {
 				$("#approveDenyButtons").hide();
 				selectedReimbursement = null;
 			}
-			else $("#approveDenyButtons").show();
+			else {
+				if (selectedReimbursement == null) loadApproveDenyButtons(true);
+				$("#approveDenyButtons").show();
+			}
 			for(let i = 0; i < json.length; i++) {
 				let re = json[i];
 				populateManagerReimbursementTable(re);

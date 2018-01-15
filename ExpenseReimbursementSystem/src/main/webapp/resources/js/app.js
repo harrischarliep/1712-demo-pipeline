@@ -54,7 +54,7 @@ function loadFooter() {
 			document.getElementById("footer").innerHTML = xhr.responseText;
 		}
 	}
-	xhr.open("GET", "ajaxLoadFooter", true);
+	xhr.open("GET", "ajaxLoadFooter?r=" + new Date().getTime(), true);
 	xhr.send();
 }
 
