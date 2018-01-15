@@ -9,7 +9,11 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum ErsReimbursementType {
 	
-	DEFAULT(0);
+	OTHER(0),
+	PERSONAL_INJURY(1),
+	SCIENCE_ACCIDENT(2),
+	PSYCHOLOGICAL_DAMAGE(3),
+	TRAVEL(4);
 	
 	private final int id;
 	
@@ -35,7 +39,11 @@ public enum ErsReimbursementType {
     private static Map<String, ErsReimbursementType> namesMap = new HashMap<String, ErsReimbursementType>(3);
 
     static {
-        namesMap.put("default", DEFAULT);
+        namesMap.put("other", OTHER);
+        namesMap.put("personal injury", PERSONAL_INJURY);
+        namesMap.put("science accident", SCIENCE_ACCIDENT);
+        namesMap.put("psychological damage", PSYCHOLOGICAL_DAMAGE);
+        namesMap.put("travel", TRAVEL);
     }
 
     @JsonCreator
